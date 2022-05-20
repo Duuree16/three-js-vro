@@ -45,8 +45,6 @@ function animate() {
     moon.position.z = z
     camera.rotation.y += ddff
     camera.rotation.x += ddffq
-
-
 }
 
 addEventListener('resize', () => {
