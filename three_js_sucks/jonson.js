@@ -23,7 +23,10 @@ var velocityX = 0
 var rotationX = 0
 var rotationZ = 0
 var rotationY = 0
-var gravity = -0.025
+var gravity = -0.02
+var prevMouseX = innerWidth / 2
+var prevMouseY = innerHeight / 2
+var sensiviviti = 0.05
 
 const geometry = new THREE.BoxGeometry(2, 2, 2);
 const material = new THREE.MeshLambertMaterial({ color: 0x0000ff });
@@ -46,6 +49,8 @@ const keys = {
     a: false,
     s: false,
     d: false,
+    left: false,
+    right: false,
 }
 const camVelocity = {
     z: 0,
@@ -73,12 +78,13 @@ function animate() {
         velocityY += gravity
         onground = false
     } else {
-        velocityY = -velocityY * 0.4
+        velocityY = -velocityY * 0.2
         if (velocityY < 0.01) {
             velocityY = 0
             onground = true
         }
     }
+    // angleVel = 0
 }
 
 animate()
@@ -98,6 +104,14 @@ function determineVelocity() {
     if (keys.d) {
         angleVel = -0.03
     }
+    if (keys.left) {
+        velocityZ = -Math.sin(angle) / 5;
+        velocityX = -Math.cos(angle) / 5;
+    }
+    if (keys.right) {
+        velocityZ = Math.sin(angle) / 5;
+        velocityX = Math.cos(angle) / 5;
+    }
 }
 
 addEventListener('keydown', (e) => {
@@ -109,6 +123,15 @@ addEventListener('keydown', (e) => {
         case 'ArrowUp':
             keys.w = true
             break
+        case 'w':
+            keys.w = true
+            break
+        case 'a':
+            keys.left = true
+            break
+        case 'd':
+            keys.right = true
+            break
         case 'ArrowLeft':
             keys.a = true
             break
@@ -118,11 +141,19 @@ addEventListener('keydown', (e) => {
         case 'ArrowDown':
             keys.s = true
             break
+        case 's':
+            keys.s = true
+            break
     }
 })
 addEventListener('keyup', (e) => {
     switch (e.key) {
         case 'ArrowUp':
+            velocityZ = -0
+            velocityX = -0
+            keys.w = false
+            break
+        case 'w':
             velocityZ = -0
             velocityX = -0
             keys.w = false
@@ -144,5 +175,31 @@ addEventListener('keyup', (e) => {
             velocityX = -0
             velocityZ = -0
             break
+        case 's':
+            velocityZ = 0
+            keys.s = false
+            velocityX = -0
+            velocityZ = -0
+            break
+        case 'a':
+            keys.left = false
+            velocityX = -0
+            velocityZ = -0
+            break
+        case 'd':
+            keys.right = false
+            velocityX = -0
+            velocityZ = -0
+            break
     }
 })
+
+// addEventListener('mousemove', (e) => {
+//     if (e.x > prevMouseX) {
+//         angleVel = -sensiviviti
+//     } else {
+//         angleVel = sensiviviti
+//     }
+
+//     prevMouseX = e.x
+// })
